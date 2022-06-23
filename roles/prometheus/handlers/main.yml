@@ -28,3 +28,9 @@
     name: alertmanager
     state: restarted
     daemon_reload: yes
+
+- name: restart pushgateway
+  systemd:
+    name: pushgateway
+    state: restarted
+    daemon_reload: yes

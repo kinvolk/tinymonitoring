@@ -17,3 +17,8 @@ alertmanager_config: "alertmanager.yml"
 # Must be absolute path
 alertmanager_rules_config: "/etc/prometheus/alert_rules.yml"
 alertmanager_web_external_url: "http://127.0.0.1:9093"
+
+install_pushgateway: false
+pushgateway_version: 1.4.3
+pushgateway_config: "pushgateway.yml"
+pushgateway_web_external_url: "http://127.0.0.1:9091"
