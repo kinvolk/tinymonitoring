@@ -78,6 +78,9 @@
 - import_tasks: alertmanager.yml
   when: install_alertmanager | bool
 
+- import_tasks: pushgateway.yml 
+  when: install_pushgateway | bool
+
 - name: clean up old binaries
   shell: |
     rm -f /usr/local/bin/prometheus-*
@@ -85,4 +88,5 @@
     rm -f /usr/local/bin/alertmanager-*
     rm -f /usr/local/bin/amtool-*
     rm -f /usr/local/bin/blackbox_exporter-*
+    rm -f /usr/local/bin/pushgateway-*
   tags: ['never', 'clean-up-old-binaries']

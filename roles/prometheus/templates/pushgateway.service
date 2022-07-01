@@ -1,0 +1,22 @@
+[Unit]
+Description=Prometheus Pushgateway
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Restart=on-failure
+
+User=prometheus
+Group=prometheus
+
+WorkingDirectory=/var/lib/prometheus
+
+ExecStart=/usr/local/bin/pushgateway --web.config.file /etc/prometheus/pushgateway.yml --web.listen-address "127.0.0.1:9091" --web.external-url "{{ pushgateway_web_external_url }}"
+
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

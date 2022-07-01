@@ -4,6 +4,7 @@ tinymonitoring is a set of simple Ansible roles to set up
 
 * Prometheus
 * Alertmanager
+* Pushgateway
 * Blackbox exporter
 
 behind Caddy & OAuth2 Proxy.

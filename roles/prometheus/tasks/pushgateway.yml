@@ -1,0 +1,36 @@
+---
+- name: determine installed pushgateway version
+  shell: pushgateway --version 2>&1 | awk '/pushgateway, version/{print $3}'
+  register: pushgateway_version_output
+
+- name: set pushgateway_installed_version
+  set_fact: pushgateway_installed_version="{{pushgateway_version_output.stdout}}"
+
+- name: install pushgateway
+  shell: |
+    cd `mktemp -d`
+    curl -fsSLO 'https://github.com/prometheus/pushgateway/releases/download/v{{ pushgateway_version }}/pushgateway-{{ pushgateway_version }}.linux-amd64.tar.gz'
+    tar xvfz "pushgateway-{{ pushgateway_version }}.linux-amd64.tar.gz"
+    install -m 0755 "pushgateway-{{ pushgateway_version }}.linux-amd64/pushgateway" /usr/local/bin/pushgateway
+  args:
+    warn: false
+  when: pushgateway_installed_version != pushgateway_version
+
+- name: install pushgateway config
+  copy:
+    src: "{{ pushgateway_config }}"
+    dest: /etc/prometheus/pushgateway.yml
+    owner: prometheus
+    group: prometheus
+  notify: restart pushgateway
+
+- name: install pushgateway.service
+  template:
+    src: pushgateway.service
+    dest: /etc/systemd/system/pushgateway.service
+  notify: restart pushgateway
+
+- name: enable pushgateway.service
+  systemd:
+    name: pushgateway
+    enabled: true
